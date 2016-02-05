@@ -30,7 +30,7 @@ float compute_precision(const flann::Matrix<T>& match, const flann::Matrix<T>& i
 
 class FLANNTestFixture : public ::testing::Test {
 protected:
-    timespec ts_;
+    clock_t start_time_;
 
     void start_timer(const std::string& message = "")
     {
@@ -38,14 +38,12 @@ protected:
             printf("%s", message.c_str());
             fflush(stdout);
         }
-        clock_gettime(CLOCK_REALTIME, &ts_);
+        start_time_ = clock();
     }
 
     double stop_timer()
     {
-		timespec ts2;
-        clock_gettime(CLOCK_REALTIME, &ts2);
-        return double((ts2.tv_sec-ts_.tv_sec)+(ts2.tv_nsec-ts_.tv_nsec)/1e9);
+        return double(clock()-start_time_)/CLOCKS_PER_SEC;
     }
 
 };
